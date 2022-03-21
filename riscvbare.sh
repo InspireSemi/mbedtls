@@ -14,4 +14,5 @@ export AR=riscv64-unknown-elf-ar
 export LD=riscv64-unknown-elf-ld
 
 CFLAGS="-DMBEDTLS_CONFIG_FILE='<mbedtls/riscv_bare.h>'"  make clean
-CFLAGS="-DMBEDTLS_CONFIG_FILE='<mbedtls/riscv_bare.h>'"  make lib
+CFLAGS="-DMBEDTLS_CONFIG_FILE='<mbedtls/riscv_bare.h>'"  make lib 
+#DEBUG=1

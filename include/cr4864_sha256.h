@@ -28,7 +28,7 @@
 #define  CLUSTER0_Y     0
 // SHA2 Mapping
 #define SHA2_X          0
-#define SHA2_Y          0
+#define SHA2_Y          1
 
 #define  HB_1           1
 
