@@ -443,16 +443,16 @@ int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
     /*
      * Output final state
      */
-    PUT_UINT32( ctx->state[0], output,  0 );
-    PUT_UINT32( ctx->state[1], output,  4 );
-    PUT_UINT32( ctx->state[2], output,  8 );
-    PUT_UINT32( ctx->state[3], output, 12 );
-    PUT_UINT32( ctx->state[4], output, 16 );
-    PUT_UINT32( ctx->state[5], output, 20 );
-    PUT_UINT32( ctx->state[6], output, 24 );
+    PUT_UINT32_BE( ctx->state[0], output,  0 );
+    PUT_UINT32_BE( ctx->state[1], output,  4 );
+    PUT_UINT32_BE( ctx->state[2], output,  8 );
+    PUT_UINT32_BE( ctx->state[3], output, 12 );
+    PUT_UINT32_BE( ctx->state[4], output, 16 );
+    PUT_UINT32_BE( ctx->state[5], output, 20 );
+    PUT_UINT32_BE( ctx->state[6], output, 24 );
 
     if( ctx->is224 == 0 )
-        PUT_UINT32( ctx->state[7], output, 28 );
+        PUT_UINT32_BE( ctx->state[7], output, 28 );
 
     return( 0 );
 }
