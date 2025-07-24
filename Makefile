@@ -1,5 +1,5 @@
 
-DESTDIR=/usr/local
+#DESTDIR=/usr/local
 PREFIX=mbedtls_
 
 .SILENT:
@@ -19,6 +19,15 @@ lib:
 
 tests: lib
 	$(MAKE) -C tests
+
+install_bare:
+	mkdir -p $(DESTDIR)/include/mbedtls
+	cp -rp include/mbedtls $(DESTDIR)/include
+	mkdir -p $(DESTDIR)/lib
+	cp -RP library/libmbedtls.*    $(DESTDIR)/lib
+	cp -RP library/libmbedx509.*   $(DESTDIR)/lib
+	cp -RP library/libmbedcrypto.* $(DESTDIR)/lib
+
 
 ifndef WINDOWS
 install: no_test
