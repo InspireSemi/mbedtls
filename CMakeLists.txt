@@ -1,14 +1,26 @@
 cmake_minimum_required(VERSION 3.0)
+if (CROSS_COMPILE_RISCV)
+set(TARGET mbedTLS)
+else()
 if(TEST_CPP)
     project("mbed TLS" C CXX)
 else()
     project("mbed TLS" C)
 endif()
+endif()
 
 option(USE_PKCS11_HELPER_LIBRARY "Build mbed TLS with the pkcs11-helper library." OFF)
 option(ENABLE_ZLIB_SUPPORT "Build mbed TLS with zlib library." OFF)
 
+if (CROSS_COMPILE_RISCV)
+option(ENABLE_PROGRAMS "Build mbed TLS programs." OFF)
+message("riscv prog")
+else()
 option(ENABLE_PROGRAMS "Build mbed TLS programs." ON)
+message("Other prog")
+endif()
+
+message("Enable program ${ENABLE_PROGRAMS}")
 
 option(UNSAFE_BUILD "Allow unsafe builds. These builds ARE NOT SECURE." OFF)
 
@@ -21,8 +33,15 @@ string(REGEX MATCH "MSVC" CMAKE_COMPILER_IS_MSVC "${CMAKE_C_COMPILER_ID}")
 if(CMAKE_COMPILER_IS_MSVC)
     option(ENABLE_TESTING "Build mbed TLS tests." OFF)
 else()
+if (CROSS_COMPILE_RISCV)
+    option(ENABLE_TESTING "Build mbed TLS tests." OFF)
+    message("riscv test off")
+else()
     option(ENABLE_TESTING "Build mbed TLS tests." ON)
 endif()
+endif()
+
+message("Enable testing ${ENABLE_TESTING}")
 
 # Warning string - created as a list for compatibility with CMake 2.8
 set(WARNING_BORDER "*******************************************************\n")
@@ -152,6 +171,10 @@ if(CMAKE_COMPILER_IS_CLANG)
     set(CMAKE_C_FLAGS_CHECK       "-Werror -Os")
 endif(CMAKE_COMPILER_IS_CLANG)
 
+if (CROSS_COMPILE_RISCV)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMBEDTLS_CONFIG_FILE='<mbedtls/riscv_bare.h>'")
+endif()
+
 if(CMAKE_COMPILER_IS_IAR)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --warn_about_c_style_casts --warnings_are_errors -Ohz")
 endif(CMAKE_COMPILER_IS_IAR)
@@ -167,6 +190,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
         set(CMAKE_SHARED_LINKER_FLAGS "--coverage")
     endif(CMAKE_COMPILER_IS_GNU OR CMAKE_COMPILER_IS_CLANG)
 endif(CMAKE_BUILD_TYPE STREQUAL "Coverage")
+
+if (CROSS_COMPILE_RISCV)
+set(LIB_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR})
+endif()
 
 if(LIB_INSTALL_DIR)
 else()

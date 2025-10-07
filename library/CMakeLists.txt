@@ -64,6 +64,7 @@ set(src_crypto
     version.c
     version_features.c
     xtea.c
+    cr4864_sha256.c
 )
 
 set(src_x509
@@ -149,14 +150,20 @@ if(USE_STATIC_MBEDTLS_LIBRARY)
     add_library(${mbedcrypto_static_target} STATIC ${src_crypto})
     set_target_properties(${mbedcrypto_static_target} PROPERTIES OUTPUT_NAME mbedcrypto)
     target_link_libraries(${mbedcrypto_static_target} ${libs})
+    target_include_directories(${mbedcrypto_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+    target_include_directories(${mbedcrypto_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include/mbedtls)
 
     add_library(${mbedx509_static_target} STATIC ${src_x509})
     set_target_properties(${mbedx509_static_target} PROPERTIES OUTPUT_NAME mbedx509)
     target_link_libraries(${mbedx509_static_target} ${libs} ${mbedcrypto_static_target})
+    target_include_directories(${mbedx509_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+    target_include_directories(${mbedx509_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include/mbedtls)
 
     add_library(${mbedtls_static_target} STATIC ${src_tls})
     set_target_properties(${mbedtls_static_target} PROPERTIES OUTPUT_NAME mbedtls)
     target_link_libraries(${mbedtls_static_target} ${libs} ${mbedx509_static_target})
+    target_include_directories(${mbedtls_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+    target_include_directories(${mbedtls_static_target} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include/mbedtls)
 
     install(TARGETS ${mbedtls_static_target} ${mbedx509_static_target} ${mbedcrypto_static_target}
             DESTINATION ${LIB_INSTALL_DIR}
