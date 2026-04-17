@@ -265,3 +265,14 @@ if(ENABLE_TESTING)
                     ${CMAKE_CURRENT_BINARY_DIR}/DartConfiguration.tcl COPYONLY)
     endif()
 endif()
+
+# Link in memset(), etc.... into the mbedtls static libraries
+add_custom_command(
+    DEPENDS mbedtls
+    DEPENDS MemoryUtilities
+    OUTPUT ${CMAKE_BINARY_DIR}/libmbedcrypto.a
+    COMMAND ${CMAKE_AR} -M < ${CMAKE_CURRENT_SOURCE_DIR}/bundle_libs.ar.in
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/library
+)
+
+add_custom_target(bundlelibs ALL DEPENDS ${CMAKE_BINARY_DIR}/libmbedcrypto.a)

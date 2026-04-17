@@ -1,0 +1,4 @@
+OPEN libmbedcrypto.a
+ADDLIB ../../platform/lib/MemoryUtilities/libMemoryUtilities.a
+SAVE
+END
