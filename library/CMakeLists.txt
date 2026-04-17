@@ -192,3 +192,9 @@ add_custom_target(lib DEPENDS mbedcrypto mbedx509 mbedtls)
 if(USE_STATIC_MBEDTLS_LIBRARY AND USE_SHARED_MBEDTLS_LIBRARY)
     add_dependencies(lib mbedcrypto_static mbedx509_static mbedtls_static)
 endif()
+
+add_dependencies(mbedcrypto MemoryUtilities)
+add_custom_command(TARGET mbedcrypto POST_BUILD
+	COMMAND ${CMAKE_AR} -M < ${CMAKE_CURRENT_SOURCE_DIR}/bundle_libs.ar.in
+	VERBATIM
+)
