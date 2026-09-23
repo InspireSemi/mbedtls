@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5...3.26)
 if (CROSS_COMPILE_RISCV)
 set(TARGET mbedTLS)
 else()
