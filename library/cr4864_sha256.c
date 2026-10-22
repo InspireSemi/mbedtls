@@ -1,12 +1,14 @@
 #include <mbedtls/sha256.h>
 #include <cr4864_sha256.h>
 
+//#define SHA2_DEBUG
+
 // Minimal hand-rolled debug print -- avoids pulling in printf_'s vararg/hex
 // formatting machinery, which blows the 32KB maskrom budget (zsbl was
 // already within ~176 bytes of the limit before any instrumentation).
 // Forward-declared directly (matches the existing printf_ pattern in this
 // file) since uart.h isn't on mbedcrypto's include path.
-#ifdef SHA2 debug
+#ifdef SHA2_DEBUG
 extern int uart_putc(unsigned char index, unsigned char c);
 
 static void dbg_puthex64(uint64_t v) {
