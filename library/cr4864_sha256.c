@@ -50,11 +50,15 @@ int mbedtls_internal_sha256_process( mbedtls_sha256_context *ctx, const unsigned
         temp |= *((uint32_t*)(&data[i*8]));
         *((volatile uint64_t*)(SHA2560_CTRL_ADDR+SHA256_DATA+i*8)) = temp;
     }
+
+    // Bug fix for RTL issue: JIRA :https://inspiresemi.atlassian.net/browse/THUNDER-737
+    asm volatile("fence o,o" ::: "memory");   // force data writes before start
+
     //start hashing
     *((volatile uint64_t*)(SHA2560_CTRL_ADDR+SHA256_CONTROL)) = SHA256_FLAG_INITMIDSTATE | SHA256_FLAG_START;
     
     // Bug fix for RTL issue: JIRA :https://inspiresemi.atlassian.net/browse/THUNDER-737
-    asm volatile("fence w,r" ::: "memory");   // force CONTROL store to take effect before polling STATUS
+    asm volatile("fence o,i" ::: "memory");   // force CONTROL store to take effect before polling STATUS
     
     //poll for done
     done = *(volatile uint64_t*)(SHA2560_CTRL_ADDR+SHA256_STATUS); 
